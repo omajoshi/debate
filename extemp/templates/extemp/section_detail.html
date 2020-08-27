@@ -1,0 +1,20 @@
+{% extends 'extemp/base.html' %}
+{% block content %}
+<h1><a href="{% url 'extemp:tournament_detail' section.round.event.tournament.pk %}">{{ section.round.event.tournament.name }} - Extemp Dashboard</a></h1>
+<h1>Section: {{ section.name }}, Event: {{ section.round.event.name}}</h1>
+<h2>Claimed Topics</h2>
+<ol>
+{% for instance in section.claimed_topics %}
+<p>Speaker {{ instance.index }}'s Topic: {{ instance.topic.code }} {{ instance.topic.question }}</p>
+{% endfor %}
+</ol>
+<h2>Unclaimed Topics</h2>
+<ul>
+{% for instance in section.unclaimed_topics %}
+<li>{{ instance }}</li>
+{% endfor %}
+</ul>
+
+
+
+{% endblock %}

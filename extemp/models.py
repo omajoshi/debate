@@ -11,25 +11,52 @@ class Tournament(models.Model):
     def get_absolute_url(self):
         return reverse('extemp:tournament_detail', kwargs={'pk': self.pk})
 
+    def __str__(self):
+        return f'Tournament: {self.name}'
+
 class Event(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f'Event: {self.name}, {self.tournament}'
 
 
 class Round(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f'Round: {self.name}, {self.event}'
+
+
 class Section(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+    running_index = models.IntegerField(default=1)
+
+    def claimed_topics(self):
+        return self.topicinstance_set.filter(available=False).order_by('index')
+
+    def unclaimed_topics(self):
+        return self.topicinstance_set.filter(available=True).order_by('topic__code')
+
+    def __str__(self):
+        return f'Section: {self.name}, {self.round}'
 
 class Topic(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
     code = models.IntegerField()
     question = models.CharField(max_length=200)
 
+    def __str__(self):
+        return f'Event: {self.round.event.name}, Round: {self.round.name} - {self.code} {self.question}'
+
 class TopicInstance(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     available = models.BooleanField(default=True)
+    index = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f'Section: {self.section.name} - {self.topic.code} {self.topic.question}'

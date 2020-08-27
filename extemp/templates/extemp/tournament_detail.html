@@ -1,4 +1,14 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
-{{ tournament.name }}
+<p>{{ tournament.name }} - Extemp Dashboard</p>
+{% for event in tournament.event_set.all %}
+<h1>Event: {{ event.name }}</h1>
+{% for round in event.round_set.all %}
+<h2>Round: {{ round.name }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a></h2>
+{% for section in round.section_set.all %}
+<a href="{% url 'extemp:section_detail' section.pk %}">Section: {{section.name}}</a>&nbsp;
+
+{% endfor %}
+{% endfor %}
+{% endfor %}
 {% endblock %}

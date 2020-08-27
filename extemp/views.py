@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
@@ -18,6 +18,12 @@ def create_topic(request):
     for section in topic.round.section_set.all():
         TopicInstance.objects.create(topic=topic, section=section)
 
+
+
+
+def manage_topics(request, pk):
+    round = get_object_or_404(Round, pk=pk)
+    return render(request, 'extemp/round_detail.html', context={'round': round})
 
 
 def draw(request):
@@ -40,3 +46,6 @@ class TournamentDetail(DetailView):
 
 class TournamentList(ListView):
     model = Tournament
+
+class SectionDetail(DetailView):
+    model = Section
