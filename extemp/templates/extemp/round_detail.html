@@ -1,6 +1,0 @@
-{% extends 'extemp/base.html' %}
-{% block content %}
-<h1><a href="{% url 'extemp:tournament_detail' round.event.tournament.pk %}">{{ round.event.tournament.name }} - Extemp Dashboard</a></h1>
-<h1>Round: {{ round.event.name}}</h1>
-<h2>Manage Topics</h2>
-{% endblock %}
