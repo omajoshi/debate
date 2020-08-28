@@ -36,7 +36,7 @@ class Section(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     running_index = models.IntegerField(default=1)
-    drawn_topics = models.ManyToManyField('TopicInstance', related_name='sections_drawn')
+    drawn_topics = models.ManyToManyField('TopicInstance', blank=True, related_name='sections_drawn')
 
     def claimed_topics(self):
         return self.topicinstance_set.filter(available=False).order_by('index')
