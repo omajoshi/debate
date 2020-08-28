@@ -17,23 +17,26 @@ class Tournament(models.Model):
 class Event(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+    code = models.CharField(max_length=10)
 
     def __str__(self):
-        return f'Event: {self.name}, {self.tournament}'
+        return f'{self.name} ({self.code}), {self.tournament}'
 
 
 class Round(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+    code = models.CharField(max_length=10)
 
     def __str__(self):
-        return f'Round: {self.name}, {self.event}'
+        return f'{self.event.name}, {self.code}'
 
 
 class Section(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     running_index = models.IntegerField(default=1)
+    drawn_topics = models.ManyToManyField('TopicInstance', related_name='sections_drawn')
 
     def claimed_topics(self):
         return self.topicinstance_set.filter(available=False).order_by('index')
@@ -42,7 +45,10 @@ class Section(models.Model):
         return self.topicinstance_set.filter(available=True).order_by('topic__code')
 
     def __str__(self):
-        return f'Section: {self.name}, {self.round}'
+        return f'{self.round.event.code}, {self.round.code} Section {self.name}'
+
+    def get_absolute_url(self):
+        return reverse('extemp:section_detail', kwargs={'pk': self.pk})
 
 class Topic(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
@@ -50,7 +56,7 @@ class Topic(models.Model):
     question = models.CharField(max_length=200)
 
     def __str__(self):
-        return f'Event: {self.round.event.name}, Round: {self.round.name} - {self.code} {self.question}'
+        return f'{self.round.event.code} {self.round.code}-{self.code} - {self.question}'
 
 class TopicInstance(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
@@ -59,4 +65,4 @@ class TopicInstance(models.Model):
     index = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f'Section: {self.section.name} - {self.topic.code} {self.topic.question}'
+        return f'Section {self.section.name}, {self.topic}'

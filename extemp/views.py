@@ -5,13 +5,9 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from .models import *
 
+from django.contrib.auth.mixins import LoginRequiredMixin 
 
-def create_view(request):
-    pass
-
-
-def view_available_topics():
-    pass
+from random import sample
 
 def manage_sections(request, pk):
     return
@@ -33,9 +29,24 @@ def manage_topics(request, pk):
     return render(request, 'extemp/manage_topics.html', context={'round': round, 'topics': topics})
 
 
-def draw(request):
-    return HttpResponse("drawn?")
-    # return render(request, '', {})
+def draw_topics(request, pk):
+    section = get_object_or_404(Section, pk=pk)
+    if section.drawn_topics.exists():
+        topics = section.drawn_topics.all()
+    else:
+        topics = sample(list(section.unclaimed_topics()), 3)
+        section.drawn_topics.add(*topics)
+    if request.method == 'POST' and (t:=request.POST.get('topic')):
+        topic_list = section.topicinstance_set.filter(pk=t)
+        if topic_list.exists():
+            topic = topic_list.get()
+            topic.index = section.running_index
+            topic.available = False
+            topic.save()
+            section.running_index += 1
+            section.save()
+        return redirect(section)
+    return render(request, 'extemp/draw_topics.html', context={'topics': topics, 'section': section})
 
 class ActivationRequiredMixin:
     pass

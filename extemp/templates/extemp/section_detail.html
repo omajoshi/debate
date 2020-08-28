@@ -5,10 +5,10 @@
 <h2>Claimed Topics</h2>
 <ol>
 {% for instance in section.claimed_topics %}
-<p>Speaker {{ instance.index }}'s Topic: {{ instance.topic.code }} {{ instance.topic.question }}</p>
+<p>Speaker {{ instance.index }}'s Topic: {{ instance.topic }}</p>
 {% endfor %}
 </ol>
-<h2>Unclaimed Topics</h2>
+<h2>Unclaimed Topics <a href="{% url 'extemp:draw_topics' section.pk %}">Draw Topics</a></h2>
 <ul>
 {% for instance in section.unclaimed_topics %}
 <li>{{ instance }}</li>

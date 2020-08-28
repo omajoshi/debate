@@ -1,6 +1,6 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
-<p>{{ tournament.name }} - Extemp Dashboard</p>
+<h1>{{ tournament.name }} - Extemp Dashboard</h1>
 {% for event in tournament.event_set.all %}
 <h1>Event: {{ event.name }}</h1>
 {% for round in event.round_set.all %}
