@@ -3,6 +3,7 @@
 <form action="{% url 'extemp:draw_topics' section.pk %}" method="post">
 {% csrf_token %}
 <input name="yes" type="hidden" value="yes" />
+<label for="name">Name: </label><input type="text" id="name" name="name" required />
 <p>Please only click this button if you are ready to draw for Section {{section.name}}, Speaker {{section.running_index}}</p>
 <input type="submit" value="Draw" />
 </form>

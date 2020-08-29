@@ -28,7 +28,18 @@ def admin_test(user):
     if user.is_anonymous or not user.is_superuser:
         raise PermissionDenied
 
-def round_update(request, pk):
+def open_test(user, round):
+    if not(user.is_authenticated and user.is_superuser) and not round.open:
+        raise PermissionDenied
+
+def toggle_open_round(request, pk):
+    admin_test(request.user)
+    round = get_object_or_404(Round, pk=pk)
+    round.open = not round.open
+    round.save()
+    return redirect(round.event.tournament)
+
+def manage_sections(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
     SectionFormSet = inlineformset_factory(Round, Section, fields=['name'], extra=3, can_delete=True)
@@ -42,7 +53,7 @@ def round_update(request, pk):
             return redirect('extemp:tournament_detail', pk=round.event.tournament.pk)
     else:
         sectionformset = SectionFormSet(instance=round)
-    return render(request, 'extemp/round_update.html', context={'sectionformset': sectionformset, 'round': round})
+    return render(request, 'extemp/manage_sections.html', context={'sectionformset': sectionformset, 'round': round})
 
 def manage_topics(request, pk):
     admin_test(request.user)
@@ -78,12 +89,14 @@ def bulk_add_topics(request, pk):
 
 def draw_topics(request, pk):
     section = get_object_or_404(Section, pk=pk)
+    open_test(request.user, section.round)
     if section.drawn_topics.exists():
         return redirect('extemp:select_topic', pk=pk)
-    if request.method == 'POST' and (y:=request.POST.get('yes')):
+    if request.method == 'POST' and (y:=request.POST.get('yes')) and (name:=request.POST.get('name')):
         topics = sample(list(section.unclaimed_topics()), 3)
         for topic in topics:
             topic.modified = datetime.now(tz=timezone.utc)
+            topic.name = name
             topic.save()
         section.drawn_topics.add(*topics)
         return redirect('extemp:select_topic', pk=pk)
@@ -91,6 +104,7 @@ def draw_topics(request, pk):
 
 def select_topic(request, pk):
     section = get_object_or_404(Section, pk=pk)
+    open_test(request.user, section.round)
     if not section.drawn_topics.exists():
         return redirect('extemp:draw_topics', pk=pk)
     topics = section.drawn_topics.all()
@@ -100,10 +114,12 @@ def select_topic(request, pk):
             topic = topic_list.get()
             topic.index = section.running_index
             topic.available = False
+            topic.save()
             section.running_index += 1
             section.save()
             section.drawn_topics.clear()
-            return redirect(topic)
+            # return redirect(topic)
+            return render(request, 'extemp/topicinstance_detail.html', context={'topicinstance': topic})
     return render(request, 'extemp/select_topic.html', context={'topics': topics, 'section': section})
 
 class ActivationRequiredMixin:

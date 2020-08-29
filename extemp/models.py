@@ -27,6 +27,7 @@ class Round(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=10)
+    open = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.event.name}, {self.code}'
@@ -65,6 +66,7 @@ class TopicInstance(models.Model):
     available = models.BooleanField(default=True)
     index = models.IntegerField(null=True, blank=True)
     modified = models.DateTimeField(null=True, blank=True)
+    name = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return f'Section {self.section.name}, {self.topic}'

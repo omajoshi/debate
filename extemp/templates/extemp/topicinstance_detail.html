@@ -1,6 +1,6 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
-<p>You are speaker {{ topicinstance.index }}.</p>
-<p>You selected topic {{ topicinstance.topic }}</p>
-<p>Please take a screenshot of this page or copy the question.</p>
+<h1>You are speaker {{ topicinstance.index }} in section {{ topicinstance.section.name }}.</h1>
+<h1>You selected topic {{ topicinstance.topic }}</h1>
+<h1>Please take a screenshot of this page or copy the question.</h1>
 {% endblock %}
