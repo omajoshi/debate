@@ -27,7 +27,6 @@ class Round(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=10)
-    open = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.event.name}, {self.code}'
@@ -39,6 +38,7 @@ class Section(models.Model):
     running_index = models.IntegerField(default=1)
     drawn_topics = models.ManyToManyField('TopicInstance', blank=True, related_name='sections_drawn')
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='sections_in')
+    open = models.BooleanField(default=False)
 
     def claimed_topics(self):
         return self.topicinstance_set.filter(available=False).order_by('index')

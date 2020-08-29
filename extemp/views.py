@@ -32,11 +32,20 @@ def open_test(user, round):
     if not(user.is_authenticated and user.is_superuser) and not round.open:
         raise PermissionDenied
 
-def toggle_open_round(request, pk):
+def open_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
-    round.open = not round.open
-    round.save()
+    for section in round.section_set.all():
+        section.open = True
+        section.save()
+    return redirect(round.event.tournament)
+
+def close_round(request, pk):
+    admin_test(request.user)
+    round = get_object_or_404(Round, pk=pk)
+    for section in round.section_set.all():
+        section.open = False
+        section.save()
     return redirect(round.event.tournament)
 
 def manage_sections(request, pk):
@@ -118,6 +127,7 @@ def select_topic(request, pk):
             section.running_index += 1
             section.save()
             section.drawn_topics.clear()
+            section.open = False
             # return redirect(topic)
             return render(request, 'extemp/topicinstance_detail.html', context={'topicinstance': topic})
     return render(request, 'extemp/select_topic.html', context={'topics': topics, 'section': section})
