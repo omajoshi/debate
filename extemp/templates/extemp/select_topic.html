@@ -1,0 +1,14 @@
+{% extends 'extemp/base.html' %}
+{% block content%}
+<form action="{% url 'extemp:select_topic' section.pk %}" method="post">
+{% csrf_token %}
+{% for topic in topics %}
+<input type="radio" name="topic" value="{{topic.pk}}" id="{{topic.pk}}" /><label for="{{topic.pk}}">{{ topic.topic.round.event.code }} {{ topic.topic.round.code }}-{{ topic.topic.code }} - {{ topic.topic.question }}</p>
+{% endfor %}
+<input type="submit" />
+</form>
+
+
+<h1>PLEASE DO NOT TAKE A PICTURE OF THIS PAGE.  TAKE A PICTURE ON THE NEXT SCREEN</h1>
+
+{% endblock %}

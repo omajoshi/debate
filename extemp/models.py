@@ -37,6 +37,7 @@ class Section(models.Model):
     name = models.CharField(max_length=50)
     running_index = models.IntegerField(default=1)
     drawn_topics = models.ManyToManyField('TopicInstance', blank=True, related_name='sections_drawn')
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='sections_in')
 
     def claimed_topics(self):
         return self.topicinstance_set.filter(available=False).order_by('index')
@@ -63,6 +64,10 @@ class TopicInstance(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     available = models.BooleanField(default=True)
     index = models.IntegerField(null=True, blank=True)
+    modified = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'Section {self.section.name}, {self.topic}'
+
+    def get_absolute_url(self):
+        return reverse('extemp:topic_detail', kwargs={'pk': self.pk})

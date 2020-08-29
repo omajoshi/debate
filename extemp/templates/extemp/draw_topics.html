@@ -2,9 +2,10 @@
 {% block content%}
 <form action="{% url 'extemp:draw_topics' section.pk %}" method="post">
 {% csrf_token %}
-{% for topic in topics %}
-<input type="radio" name="topic" value="{{topic.pk}}" id="{{topic.pk}}" /><label for="{{topic.pk}}">{{ topic.topic.round.event.code }} {{ topic.topic.round.code }}-{{ topic.topic.code }} - {{ topic.topic.question }}</p>
-{% endfor %}
-<input type="submit" />
+<input name="yes" type="hidden" value="yes" />
+<p>Please only click this button if you are ready to draw for Section {{section.name}}, Speaker {{section.running_index}}</p>
+<input type="submit" value="Draw" />
 </form>
+
+
 {% endblock %}

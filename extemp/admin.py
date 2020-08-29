@@ -11,6 +11,9 @@ class RoundInline(admin.TabularInline):
 class SectionInline(admin.TabularInline):
     model = Section
 
+class TopicInstanceInline(admin.TabularInline):
+    model = TopicInstance
+
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
     inlines = [EventInline]
@@ -23,7 +26,9 @@ class EventAdmin(admin.ModelAdmin):
 class RoundAdmin(admin.ModelAdmin):
     inlines = [SectionInline]
 
+@admin.register(Section)
+class SectionAdmin(admin.ModelAdmin):
+    inlines = [TopicInstanceInline]
 
-admin.site.register(Section)
 admin.site.register(Topic)
 admin.site.register(TopicInstance)

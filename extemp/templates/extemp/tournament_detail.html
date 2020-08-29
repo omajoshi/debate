@@ -2,9 +2,9 @@
 {% block content %}
 <h1>{{ tournament.name }} - Extemp Dashboard</h1>
 {% for event in tournament.event_set.all %}
-<h1>Event: {{ event.name }}</h1>
+<h1>{{ event.name }}</h1>
 {% for round in event.round_set.all %}
-<h2>Round: {{ round.name }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a></h2>
+<h2>{{ round.name }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:round_update' round.pk %}">Manage Sections</a></h2>
 {% for section in round.section_set.all %}
 <a href="{% url 'extemp:section_detail' section.pk %}">Section: {{section.name}}</a>&nbsp;
 
