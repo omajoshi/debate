@@ -32,6 +32,14 @@ class Round(models.Model):
         return f'{self.event.name}, {self.code}'
 
 
+class RoundGroup(models.Model):
+    name = models.CharField(max_length=50)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    rounds = models.ManyToManyField(Round, blank=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
 class Section(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
@@ -51,6 +59,10 @@ class Section(models.Model):
 
     def get_absolute_url(self):
         return reverse('extemp:section_detail', kwargs={'pk': self.pk})
+
+    def draw_url(self):
+        return reverse('extemp:draw_topics', kwargs={'pk': self.pk})
+
 
 class Topic(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)

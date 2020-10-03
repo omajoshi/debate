@@ -4,7 +4,7 @@
 <h1>{{section.round.event.name}} {{section.round.code}}, Section: {{ section.name }}</h1>
 <h2>Claimed Topics {% if user.is_superuser %}<a href="{% url 'extemp:section_detail_secret' section.pk %}">Secret</a>{% endif %}</h2>
 <p>Empty for security</p>
-<h2>Unclaimed Topics <a href="{% url 'extemp:draw_topics' section.pk %}">Draw Topics</a></h2>
+<h2>Unclaimed Topics{% if section.open %} <a href="{% url 'extemp:draw_topics' section.pk %}">Draw Topics</a>{% endif %}</h2>
 <p>Currently awaiting speaker #{{ section.running_index }}.</p>
 
 

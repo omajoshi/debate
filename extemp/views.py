@@ -6,7 +6,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from .models import *
-from django.forms import modelformset_factory, inlineformset_factory
+from .forms import *
+
+from django.forms import modelformset_factory, inlineformset_factory, ModelForm
 
 from datetime import datetime
 from django.utils import timezone
@@ -28,9 +30,27 @@ def admin_test(user):
     if user.is_anonymous or not user.is_superuser:
         raise PermissionDenied
 
-def open_test(user, round):
-    if not(user.is_authenticated and user.is_superuser) and not round.open:
+def open_test(user, section):
+    if not(user.is_authenticated and user.is_superuser) and not section.open:
         raise PermissionDenied
+
+def open_roundgroup(request, pk):
+    admin_test(request.user)
+    roundgroup = get_object_or_404(RoundGroup, pk=pk)
+    for round in roundgroup.rounds.all():
+        for section in round.section_set.all():
+            section.open = True
+            section.save()
+    return redirect('extemp:manage_roundgroups', pk=roundgroup.tournament.pk)
+
+def close_roundgroup(request, pk):
+    admin_test(request.user)
+    roundgroup = get_object_or_404(RoundGroup, pk=pk)
+    for round in roundgroup.rounds.all():
+        for section in round.section_set.all():
+            section.open = False
+            section.save()
+    return redirect('extemp:manage_roundgroups', pk=roundgroup.tournament.pk)
 
 def open_round(request, pk):
     admin_test(request.user)
@@ -48,6 +68,20 @@ def close_round(request, pk):
         section.save()
     return redirect(round.event.tournament)
 
+def open_section(request, pk):
+    admin_test(request.user)
+    section = get_object_or_404(Section, pk=pk)
+    section.open = True
+    section.save()
+    return redirect(section)
+
+def close_section(request, pk):
+    admin_test(request.user)
+    section = get_object_or_404(Section, pk=pk)
+    section.open = False
+    section.save()
+    return redirect(section)
+
 def manage_sections(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
@@ -63,6 +97,19 @@ def manage_sections(request, pk):
     else:
         sectionformset = SectionFormSet(instance=round)
     return render(request, 'extemp/manage_sections.html', context={'sectionformset': sectionformset, 'round': round})
+
+def manage_roundgroups(request, pk):
+    admin_test(request.user)
+    tournament = get_object_or_404(Tournament, pk=pk)
+    RoundGroupFormSet = inlineformset_factory(Tournament, RoundGroup, form=RoundGroupForm, extra=3, can_delete=True)
+    if request.method == "POST":
+        roundgroupformset = RoundGroupFormSet(request.POST, instance=tournament)
+        if roundgroupformset.is_valid():
+            roundgroupformset.save()
+            return redirect(tournament)
+    else:
+        roundgroupformset = RoundGroupFormSet(instance=tournament)
+    return render(request, 'extemp/manage_roundgroups.html', context={'roundgroupformset': roundgroupformset, 'tournament': tournament})
 
 def manage_topics(request, pk):
     admin_test(request.user)
@@ -98,7 +145,7 @@ def bulk_add_topics(request, pk):
 
 def draw_topics(request, pk):
     section = get_object_or_404(Section, pk=pk)
-    open_test(request.user, section.round)
+    open_test(request.user, section)
     if section.drawn_topics.exists():
         return redirect('extemp:select_topic', pk=pk)
     if request.method == 'POST' and (y:=request.POST.get('yes')) and (name:=request.POST.get('name')):
@@ -113,7 +160,7 @@ def draw_topics(request, pk):
 
 def select_topic(request, pk):
     section = get_object_or_404(Section, pk=pk)
-    open_test(request.user, section.round)
+    open_test(request.user, section)
     if not section.drawn_topics.exists():
         return redirect('extemp:draw_topics', pk=pk)
     topics = section.drawn_topics.all()
@@ -125,9 +172,9 @@ def select_topic(request, pk):
             topic.available = False
             topic.save()
             section.running_index += 1
+            section.open = False
             section.save()
             section.drawn_topics.clear()
-            section.open = False
             # return redirect(topic)
             return render(request, 'extemp/topicinstance_detail.html', context={'topicinstance': topic})
     return render(request, 'extemp/select_topic.html', context={'topics': topics, 'section': section})
@@ -159,3 +206,6 @@ class SectionDetailProduction(DetailView):
 
 class TopicDetail(AdminRequiredMixin, DetailView):
     model = TopicInstance
+
+class RoundGroupDetail(AdminRequiredMixin, DetailView):
+    model = RoundGroup

@@ -1,0 +1,27 @@
+{% extends 'extemp/base.html' %}
+{% block content %}
+<h1><a href="{% url 'extemp:tournament_detail' tournament.pk %}">{{ tournament.name }} - Extemp Dashboard</a> Manage Round Groups</h1>
+<form method="post" action="{% url 'extemp:manage_roundgroups' tournament.pk %}">
+{% csrf_token %}
+{{ roundgroupformset.management_form }}
+<table>
+{% for form in roundgroupformset %}
+<tr>
+<td>{{form.as_p}}</td>
+<td>{% if form.instance.pk %}<a href="{% url 'extemp:open_roundgroup' form.instance.pk%}">Open All Envelopes</a>{% endif %}</td>
+<td>{% if form.instance.pk %}<a href="{% url 'extemp:close_roundgroup' form.instance.pk%}">Close All Envelopes</a>{% endif %}</td>
+<td>{% if form.instance.pk %}
+<textarea rows="10" cols="100" style="resize: none;">
+{% for round in form.instance.rounds.all %}{% for section in round.section_set.all %}{{ section.round.event.code }} {{ section.name }} {{ request.scheme }}://{{ request.get_host }}{{ section.draw_url }}
+
+{% endfor %}{% endfor %}
+</textarea>
+{% endif %}</td>
+</tr>
+
+{% endfor %}
+</table>
+<input type="submit" value="Save" />
+</form>
+
+{% endblock %}

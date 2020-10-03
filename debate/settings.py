@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'ld*0zw5gavkers1i@+pj%vf=iuuow5bickb%3(ckc$_y32ewc8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['157.245.255.28']
+ALLOWED_HOSTS = ['157.245.255.28', 'debate.omajoshi.com']
 
 
 # Application definition

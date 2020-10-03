@@ -6,7 +6,7 @@
 {% for instance in section.claimed_topics %}
 <p>Speaker {{ instance.index }} ({{ instance.name }})'s Topic: {{ instance.topic }} - was drawn {{ instance.modified | timesince }} ago</p>
 {% endfor %}
-<h2>Unclaimed Topics <a href="{% url 'extemp:draw_topics' section.pk %}">Draw Topics</a></h2>
+<h2>Unclaimed Topics <a href="{% url 'extemp:draw_topics' section.pk %}">Draw Topics</a> {% if section.open %}<a href="{% url 'extemp:close_section' section.pk %}">Close Envelopes</a>{% else %}<a href="{% url 'extemp:open_section' section.pk %}">Open Envelopes</a>{% endif %}</h2>
 <ul>
 {% for instance in section.unclaimed_topics %}
 <li>{{ instance }}</li>

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from .forms import *
 # Register your models here.
 
 class EventInline(admin.TabularInline):
@@ -32,3 +33,8 @@ class SectionAdmin(admin.ModelAdmin):
 
 admin.site.register(Topic)
 admin.site.register(TopicInstance)
+
+@admin.register(RoundGroup)
+class RoundGroupAdmin(admin.ModelAdmin):
+    form = RoundGroupForm
+    fields = ['tournament', 'name', 'rounds']
