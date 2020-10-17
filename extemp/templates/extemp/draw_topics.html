@@ -1,10 +1,19 @@
 {% extends 'extemp/base_public.html' %}
 {% block content %}
+<h1>{{ section.round.event.tournament.name }} Extemp Draw</h1>
+<h1>{{ section.round.event.name }} {{ section.round.get_name_display }}</h1>
 <form action="{% url 'extemp:draw_topics' section.pk %}" method="post">
 {% csrf_token %}
 <input name="yes" type="hidden" value="yes" />
-<label for="name">Name: </label><input type="text" id="name" name="name" required />
-<p>Please only click this button if you are ready to draw for {{section.round}} Section {{section.name}}, Speaker {{section.running_index}}</p>
-<input type="submit" value="Draw" />
+<div class="form-group">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-control" id="name" name="name" required />
+</div>
+<div class="row">
+    <div class="col-sm-11">Please only click this button if you are ready to draw for {{section.round}} Section {{section.name}}, Speaker {{section.running_index}}</div>
+    <div class="col-sm-1">
+        <input class="btn btn-primary float-sm-right" type="submit" value="Submit">
+    </div>
+</div>
 </form>
 {% endblock %}
