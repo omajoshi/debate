@@ -12,7 +12,7 @@
 <hr>
 <h3>Speakers</h3>
 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allSpeakers" aria-expanded="false" aria-controls="allSpeakers">
-    Expand
+    Expand/Collapse
 </button>
 <div class="collapse" id="allSpeakers">
   <h3>Topics Drawn</h3>
@@ -24,7 +24,7 @@
 <hr>
 <h3>{{ event.name }}</h3>
 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#{{event.name}}Details" aria-expanded="false" aria-controls="{{event.name}}Details">
-  Expand
+  Expand/Collapse
 </button>
 <div class="collapse" id="{{event.name}}Details">
 {% for round in event.round_set.all %}

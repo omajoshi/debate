@@ -4,9 +4,9 @@
 <hr>
 <h3>Speakers</h3>
 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allSpeakers" aria-expanded="false" aria-controls="allSpeakers">
-    Expand
+    Expand/Collapse
 </button>
-<div class="collapse" id="allSpeakers">
+<div class="collapse show" id="allSpeakers">
   <h3>Topics Drawn</h3>
   {% for instance in tournament.get_current_topicinstances %}
   <p>{{ instance.section.round.event.code }} {{ instance.section.round.get_name_display }} Speaker {{ instance.index }} - {{ instance.name }} drew <b>{{ instance.modified | timesince }} ago</b></p>
