@@ -19,14 +19,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ld*0zw5gavkers1i@+pj%vf=iuuow5bickb%3(ckc$_y32ewc8'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['157.245.255.28', 'debate.omajoshi.com']
-
 
 # Application definition
 
@@ -119,3 +111,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+SECRET_KEY = "ABCDEFGHIJKLMNOP"
+DEBUG = True
+ALLOWED_HOSTS = ["*"]
+
+'''
+local_settings.py should contain the following settings:
+SECRET_KEY
+DEBUG
+ALLOWED_HOSTS
+'''
+
+# UNCOMMENT THIS ONCE YOU SET THE LOCAL SETTINGS
+# from .local_settings import *
+
