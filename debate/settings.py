@@ -112,13 +112,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+STATIC_ROOT = ''
 SECRET_KEY = "ABCDEFGHIJKLMNOP"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 '''
 local_settings.py should contain the following settings:
+STATIC_ROOT
 SECRET_KEY
 DEBUG
 ALLOWED_HOSTS
