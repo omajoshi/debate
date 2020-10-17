@@ -9,9 +9,13 @@
 <p><a href="{% url 'extemp:section_detail' section.pk %}">Section: {{section.name}}</a> {% if section.drawn_topics.exists %}topics have been drawn{% elif section.open %}envelope is open{% else %}envelope is closed{% endif %}.</p>
 {% endfor %}
 {% endfor %}
+<hr>
+<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allRounds" aria-expanded="false" aria-controls="allRounds">
+    View All Rounds
+  </button>
+
+<div class="collapse" id="allRounds">
 {% for event in tournament.event_set.all %}
-
-
 <hr>
 <h3>{{ event.name }}</h3>
 {% for round in event.round_set.all %}
@@ -25,4 +29,5 @@
 {% endfor %}
 {% endfor %}
 {% endfor %}
+</div>
 {% endblock %}
