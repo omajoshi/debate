@@ -8,11 +8,12 @@
 <p>Paste topics here (one per line, just the question)</p>
 <form action="{% url 'extemp:bulk_add_topics' round.pk %}" method="post">
 {% csrf_token %}
-<textarea name="topics" rows="20" cols="100" required></textarea>
+<textarea name="topics" rows="20" cols="100" required>{% for topic in topics %}
+{{ topic.question }}{% empty %}{% endfor %}</textarea>
 <br>
 <input type="checkbox" required id="yes" /><label for="yes">I acknowledge that all current topics will be deleted and replaced with the new topics entered above.</label>
 <br>
 <br>
-<input type="submit" value="Submit" />
+<input type="submit" class="btn-primary" value="Submit" />
 </form>
 {% endblock %}

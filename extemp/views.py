@@ -204,7 +204,8 @@ def bulk_add_topics(request, pk):
                 for section in round.section_set.all():
                     section.topicinstance_set.create(topic=t)
         return redirect('extemp:manage_topics', pk=round.pk)
-    return render(request, 'extemp/bulk_add_topics.html', context={'round': round})
+    topics = round.topic_set.order_by('code')
+    return render(request, 'extemp/bulk_add_topics.html', context={'round': round, 'topics': topics})
 
 
 def draw_topics(request, pk):
