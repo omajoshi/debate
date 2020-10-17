@@ -203,7 +203,7 @@ def bulk_add_topics(request, pk):
                 t = round.topic_set.create(code=i+1, question=line)
                 for section in round.section_set.all():
                     section.topicinstance_set.create(topic=t)
-        return redirect('extemp:manage_topics', pk=round.pk)
+        return redirect(round.event.tournament)
     topics = round.topic_set.order_by('code')
     return render(request, 'extemp/bulk_add_topics.html', context={'round': round, 'topics': topics})
 
