@@ -1,4 +1,12 @@
 {% extends 'extemp/base.html' %}
+{% block head %}
+<script type = "text/JavaScript">
+  function AutoRefresh( t ) {
+    setTimeout("location.reload(true);", t);
+  }
+  window.onload = AutoRefresh(60000);
+</script>
+{% endblock %}
 {% block content %}
 <h1>{{ tournament.name }} Dashboard - Clock</a></h1>
 <hr>
