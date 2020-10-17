@@ -17,6 +17,9 @@ class Tournament(models.Model):
     def get_current_rounds(self):
         return Round.objects.filter(event__tournament=self.pk, current=True).order_by('event_id')
 
+    def get_current_topicinstances(self):
+        return TopicInstance.objects.filter(section__round__current=True, available=False).order_by('modified')
+
     def __str__(self):
         return f'Tournament: {self.name}'
 

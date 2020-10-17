@@ -10,10 +10,19 @@
 {% endfor %}
 {% endfor %}
 <hr>
+<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allSpeakers" aria-expanded="false" aria-controls="allSpeakers">
+    View All Speakers
+</button>
+<div class="collapse" id="allSpeakers">
+  <h2>Topics Drawn</h2>
+  {% for instance in tournament.get_current_topicinstances %}
+  <p>{{ instance.section.round.event.code }} {{ instance.section.round.get_name_display }} Speaker {{ instance.index }} drew <b>{{ instance.modified | timesince }} ago</b></p>
+  {% endfor %}
+</div>
+<hr>
 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allRounds" aria-expanded="false" aria-controls="allRounds">
     View All Rounds
-  </button>
-
+</button>
 <div class="collapse" id="allRounds">
 {% for event in tournament.event_set.all %}
 <hr>
