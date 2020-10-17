@@ -10,23 +10,23 @@
 {% endfor %}
 {% endfor %}
 <hr>
+<h3>Speakers</h3>
 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allSpeakers" aria-expanded="false" aria-controls="allSpeakers">
-    View All Speakers
+    Expand
 </button>
 <div class="collapse" id="allSpeakers">
-  <h2>Topics Drawn</h2>
+  <h3>Topics Drawn</h3>
   {% for instance in tournament.get_current_topicinstances %}
   <p>{{ instance.section.round.event.code }} {{ instance.section.round.get_name_display }} Speaker {{ instance.index }} - {{ instance.name }} drew <b>{{ instance.modified | timesince }} ago</b></p>
   {% endfor %}
 </div>
-<hr>
-<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allRounds" aria-expanded="false" aria-controls="allRounds">
-    View All Rounds
-</button>
-<div class="collapse show" id="allRounds">
 {% for event in tournament.event_set.all %}
 <hr>
 <h3>{{ event.name }}</h3>
+<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#{{event.name}}Details" aria-expanded="false" aria-controls="{{event.name}}Details">
+  Expand
+</button>
+<div class="collapse" id="{{event.name}}Details">
 {% for round in event.round_set.all %}
 {% if round.current %}
 <h5>{{ round.get_name_display }} - <a href="{% url 'extemp:bulk_add_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:manage_sections' round.pk %}">Manage Sections</a> - <a href="{% url 'extemp:remove_current_round' round.pk %}">Remove as Current Round</a></h5>
@@ -37,6 +37,6 @@
 <p><a href="{% url 'extemp:section_detail' section.pk %}">Section: {{section.name}}</a> {% if section.drawn_topics.exists %}topics have been drawn{% elif section.open %}envelope is open{% else %}envelope is closed{% endif %}.</p>
 {% endfor %}
 {% endfor %}
-{% endfor %}
 </div>
+{% endfor %}
 {% endblock %}
