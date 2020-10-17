@@ -21,7 +21,7 @@ class Tournament(models.Model):
 
     def get_current_topicinstances(self):
         time_threshold = datetime.now() - timedelta(minutes=37)
-        return TopicInstance.objects.filter(modified__lt=time_threshold, section__round__current=True, available=False).order_by('modified')
+        return TopicInstance.objects.filter(modified__gt=time_threshold, section__round__current=True, available=False).order_by('modified')
 
     def __str__(self):
         return f'Tournament: {self.name}'
