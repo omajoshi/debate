@@ -1,7 +1,7 @@
 <form action="{% url 'extemp:select_topic' section.pk %}" method="post">
 {% csrf_token %}
 {% for topic in topics %}
-<input type="radio" name="topic" value="{{topic.pk}}" id="{{topic.pk}}" /><label for="{{topic.pk}}">{{ topic.topic.round.event.code }} {{ topic.topic.round.code }}-{{ topic.topic.code }} - {{ topic.topic.question }}</p>
+<input type="radio" name="topic" value="{{topic.pk}}" id="{{topic.pk}}" /><label for="{{topic.pk}}">{{ topic.topic.round }}-{{ topic.topic.code }} - {{ topic.topic.question }}</p>
 {% endfor %}
 <input type="submit" />
 </form>

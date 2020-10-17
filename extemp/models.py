@@ -24,12 +24,27 @@ class Event(models.Model):
 
 
 class Round(models.Model):
+    ROUND_NAMES = (
+        ("1", "Round 1",),
+        ("2", "Round 2",),
+        ("3", "Round 3",),
+        ("4", "Round 4",),
+        ("5", "Round 5",),
+        ("6", "Round 6",),
+        ("7", "Round 7",),
+        ("8", "Round 8",),
+        ("9", "Round 9",),
+        ("d", "Doubles",),
+        ("o", "Octas",),
+        ("q", "Quarters",),
+        ("s", "Semis",),
+        ("f", "Finals",),
+    )
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    code = models.CharField(max_length=10)
+    name = models.CharField(max_length=1, choices=ROUND_NAMES)
 
     def __str__(self):
-        return f'{self.event.name}, {self.code}'
+        return f'{self.event.name}, {self.get_name_display()}'
 
 
 class RoundGroup(models.Model):
@@ -55,7 +70,7 @@ class Section(models.Model):
         return self.topicinstance_set.filter(available=True).order_by('topic__code')
 
     def __str__(self):
-        return f'{self.round.event.code}, {self.round.code} Section {self.name}'
+        return f'{self.round} Section {self.name}'
 
     def get_absolute_url(self):
         return reverse('extemp:section_detail', kwargs={'pk': self.pk})
@@ -70,7 +85,7 @@ class Topic(models.Model):
     question = models.CharField(max_length=200)
 
     def __str__(self):
-        return f'{self.round.event.code} {self.round.code}-{self.code} - {self.question}'
+        return f'{self.round}-{self.code} - {self.question}'
 
 class TopicInstance(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)

@@ -2,6 +2,6 @@
 {% csrf_token %}
 <input name="yes" type="hidden" value="yes" />
 <label for="name">Name: </label><input type="text" id="name" name="name" required />
-<p>Please only click this button if you are ready to draw for {{section.round.event.name}} {{section.round.code}} Section {{section.name}}, Speaker {{section.running_index}}</p>
+<p>Please only click this button if you are ready to draw for {{section.round}} Section {{section.name}}, Speaker {{section.running_index}}</p>
 <input type="submit" value="Draw" />
 </form>

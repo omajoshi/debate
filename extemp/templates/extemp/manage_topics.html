@@ -3,7 +3,7 @@
 {% endblock %}
 {% block content %}
 <h1><a href="{% url 'extemp:tournament_detail' round.event.tournament.pk %}">{{ round.event.tournament.name }} - Extemp Dashboard</a></h1>
-<h1>Round: {{ round.event.name}} {{round.code}}</h1>
+<h1>{{round}}</h1>
 <h2>Manage Topics <a href="{% url 'extemp:bulk_add_topics' round.pk %}">Bulk Add Topics</a></h2>
 <form action="{% url 'extemp:manage_topics' round.pk %}" method="post">
 {% csrf_token %}

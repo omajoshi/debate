@@ -1,7 +1,7 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
 <h1><a href="{% url 'extemp:tournament_detail' section.round.event.tournament.pk %}">{{ section.round.event.tournament.name }} - Extemp Dashboard</a></h1>
-<h1>{{section.round.event.name}} {{section.round.code}}, Section: {{ section.name }}</h1>
+<h1>{{section.round}}, Section: {{ section.name }}</h1>
 <h2>Claimed Topics {% if user.is_superuser %}<a href="{% url 'extemp:section_detail_secret' section.pk %}">Secret</a>{% endif %}</h2>
 <p>Empty for security</p>
 <h2>Unclaimed Topics{% if section.open %} <a href="{% url 'extemp:draw_topics' section.pk %}">Draw Topics</a>{% endif %}</h2>

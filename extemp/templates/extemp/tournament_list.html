@@ -1,7 +1,8 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
+<h1>Tournaments</h1>
 {% for tournament in tournament_list %}
-<h1><a href="{% url 'extemp:tournament_detail' tournament.pk %}">{{ tournament.name }}</a></h1>
+<h2><a href="{% url 'extemp:tournament_detail' tournament.pk %}">{{ tournament.name }}</a></h2>
 {% empty %}
 <p>empty</p>
 {% endfor %}
