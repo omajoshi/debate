@@ -14,6 +14,9 @@ class Tournament(models.Model):
     def get_set_tournament_details_url(self):
         return reverse('extemp:tournament_set_tournament_details', kwargs={'pk': self.pk})
 
+    def get_current_rounds(self):
+        return Round.objects.filter(event__tournament=self.pk, current=True).order_by('event_id')
+
     def __str__(self):
         return f'Tournament: {self.name}'
 

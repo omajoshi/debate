@@ -60,6 +60,13 @@ def current_round(request, pk):
     round.save()
     return redirect(round.event.tournament)
 
+def remove_current_round(request, pk):
+    admin_test(request.user)
+    round = get_object_or_404(Round, pk=pk)
+    round.current = False
+    round.save()
+    return redirect(round.event.tournament)
+
 def open_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)

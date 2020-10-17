@@ -1,14 +1,21 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
 <h1>{{ tournament.name }} - Extemp Dashboard <a href="{% url 'extemp:manage_roundgroups' tournament.pk %}">Manage Round Groups</a></h1>
+<hr>
+<h3>Current Rounds</h3>
+{% for round in tournament.get_current_rounds %}
+<h5>{{ round.event.name }} - {{ round.get_name_display }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:manage_sections' round.pk %}">Manage Sections</a> - <a href="{% url 'extemp:open_round' round.pk %}">Open Envelopes</a> - <a href="{% url 'extemp:close_round' round.pk %}">Close Envelopes</a></h5>
+{% endfor %}
 {% for event in tournament.event_set.all %}
+
+
 <hr>
 <h3>{{ event.name }}</h3>
 {% for round in event.round_set.all %}
 {% if round.current %}
-<h5>{{ round.get_name_display }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:manage_sections' round.pk %}">Manage Sections</a> - <a href="{% url 'extemp:open_round' round.pk %}">Open Envelopes</a> - <a href="{% url 'extemp:close_round' round.pk %}">Close Envelopes</a></h5>
+<h5>{{ round.get_name_display }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:manage_sections' round.pk %}">Manage Sections</a> - <a href="{% url 'extemp:remove_current_round' round.pk %}">Remove as Current Round</a></h5>
 {% else %}
-<p>{{ round.get_name_display }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:manage_sections' round.pk %}">Manage Sections</a> - <a href="{% url 'extemp:open_round' round.pk %}">Open Envelopes</a> - <a href="{% url 'extemp:close_round' round.pk %}">Close Envelopes</a></p>
+<p>{{ round.get_name_display }} - <a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> - <a href="{% url 'extemp:manage_sections' round.pk %}">Manage Sections</a> - <a href="{% url 'extemp:current_round' round.pk %}">Set as Current Round</a></p>
 {% endif %}
 {% for section in round.section_set.all %}
 <p><a href="{% url 'extemp:section_detail' section.pk %}">Section: {{section.name}}</a> {% if section.drawn_topics.exists %}topics have been drawn{% elif section.open %}envelope is open{% else %}envelope is closed{% endif %}.</p>
