@@ -1,4 +1,11 @@
 {% extends 'extemp/base.html' %}
+{% block head %}
+<style>
+div.form-group input[type=text] {
+    width: 100%;
+}
+</style>
+{% endblock %}
 {% block content %}
 <h1><a href="{% url 'extemp:tournament_detail' round.event.tournament.pk %}">{{ round.event.tournament.name }} - Extemp Dashboard</a></h1>
 <h1>{{round}}</h1>
@@ -6,11 +13,28 @@
 <form method="post" action="{% url 'extemp:manage_sections' round.pk %}">
 {% csrf_token %}
 {{ sectionformset.management_form }}
-<table>
+<div class="row">
+    <div class="col-sm-11">
+        Name
+    </div>
+    <div class="col-sm-1">
+        Delete
+    </div>
+</div>
 {% for form in sectionformset %}
-<tr><td>{{form.as_p}}</td></tr>
+<div class="row">
+    <div class="col-sm-11">
+        <div class="form-group">
+            {{form.name}}
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <div class="form-group">
+            {{form.DELETE}}
+        </div>
+    </div>
+</div>
 {% endfor %}
-</table>
 <input type="submit" value="Save" />
 </form>
 
