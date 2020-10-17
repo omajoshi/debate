@@ -22,6 +22,9 @@ div.form-group input[type=text] {
     </div>
 </div>
 {% for form in sectionformset %}
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
 <div class="row">
     <div class="col-sm-11">
         <div class="form-group">
