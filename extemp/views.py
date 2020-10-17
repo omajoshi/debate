@@ -188,8 +188,32 @@ class TournamentCreate(AdminRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        return redirect(self.get_set_tournament_details_url())
 
+def set_tournament_details(request, pk):
+    admin_test(request.user)
+    tournament = get_object_or_404(Tournament, pk=pk)
+    choices = Round.ROUND_NAMES
+    if request.method == "POST":
+        keys = {x:{} for x in range(6)}
+        for key in request.POST.keys():
+            val = request.POST.get(key)
+            if val is None or key == "csrfmiddlewaretoken":
+                continue
+            a, b = key.split("-")
+            keys[int(a)][b] = val
+        for row in keys.keys():
+            name = keys[row]["name"]
+            code = keys[row]["code"]
+            if not name or not code:
+                continue
+            e, created = tournament.event_set.get_or_create(name=name, code=code)
+            for choice, fullname in choices:
+                if keys[row].get(choice):
+                    e.round_set.get_or_create(name=choice)
+
+        return redirect(tournament.get_absolute_url())
+    return render(request, "extemp/set_tournament_details.html", context={"tournament": tournament, "choices": choices})
 
 class TournamentDetail(AdminRequiredMixin, DetailView):
     model = Tournament

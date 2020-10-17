@@ -5,6 +5,7 @@ app_name = 'extemp'
 urlpatterns = [
     path('tournament/create/', TournamentCreate.as_view(), name='tournament_create'),
     path('tournament/<int:pk>/roundgroups/', manage_roundgroups, name='manage_roundgroups'),
+    path('tournament/<int:pk>/details/', set_tournament_details, name='set_tournament_details'),
     path('tournament/<int:pk>/', TournamentDetail.as_view(), name='tournament_detail'),
     path('round/<int:pk>/sections/', manage_sections, name='manage_sections'),
     path('round/<int:pk>/open/', open_round, name='open_round'),
