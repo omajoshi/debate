@@ -1,0 +1,43 @@
+{% extends 'extemp/base.html' %}
+{% block content %}
+<div class="row d-flex">
+    <div class="col-sm">
+        <h1>{{ tournament.name}}</h1>
+    </div>
+</div>
+<form action="{% url 'extemp:set_event_details' tournament.pk %}" method="post">
+{% csrf_token %}
+{% for x in "012345" %}
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="{{x}}-name">Event Name</label>
+            <input type="text" class="form-control" id="{{x}}-name" name="{{x}}-name" placeholder="Event Name">
+        </div>
+        <div class="form-group">
+            <label for="{{x}}-code">Event Code</label>
+            <input type="text" class="form-control" id="{{x}}-code" name="{{x}}-code" placeholder="Event Code">
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <p>Rounds</p>
+        {% for choice in choices %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="{{choice.0}}" id="{{x}}-{{choice.0}}" name="{{x}}-{{choice.0}}">
+            <label class="form-check-label" for="{{x}}-{{choice.0}}">
+              {{ choice.1 }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<hr>
+{% endfor %}
+<div class="row">
+    <div class="col-sm-12">
+        <input class="btn btn-primary float-sm-right" type="submit" value="Submit">
+    </div>
+</div>
+</form>
+{% endblock %}
+

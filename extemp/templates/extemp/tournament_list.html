@@ -1,6 +1,11 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
-<h1>Tournaments</h1>
+<div class="row d-flex">
+    <div class="col-sm">
+        <h1>Tournaments</h1>
+    </div>
+</div>
+
 {% for tournament in tournament_list %}
 <h2><a href="{% url 'extemp:tournament_detail' tournament.pk %}">{{ tournament.name }}</a></h2>
 {% empty %}
