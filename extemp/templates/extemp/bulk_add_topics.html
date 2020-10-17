@@ -4,7 +4,7 @@
 {% block content %}
 <h1><a href="{% url 'extemp:tournament_detail' round.event.tournament.pk %}">{{ round.event.tournament.name }} - Extemp Dashboard</a></h1>
 <h1>{{round}}</h1>
-<h2><a href="{% url 'extemp:manage_topics' round.pk %}">Manage Topics</a> Bulk Add Topics</h2>
+<h2>Bulk Add Topics <a href="{% url 'extemp:manage_topics' round.pk %}">Manually Manage Topics</a></h2>
 <p>Paste topics here (one per line, just the question)</p>
 <form action="{% url 'extemp:bulk_add_topics' round.pk %}" method="post">
 {% csrf_token %}

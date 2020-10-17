@@ -1,38 +1,47 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
-from django.http import HttpResponse
-from django.core.exceptions import PermissionDenied
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
-from django.views.generic.list import ListView
-from .models import *
-from .forms import *
-
-from django.forms import modelformset_factory, inlineformset_factory, ModelForm
-
 from datetime import datetime
-from django.utils import timezone
+from random import sample
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin as LRM, UserPassesTestMixin as UPTM
 from django.contrib.auth.decorators import login_required, user_passes_test
-from random import sample
+from django.core.exceptions import PermissionDenied
+from django.forms import modelformset_factory, inlineformset_factory, ModelForm
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils import timezone
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
+
+from .models import *
+from .forms import *
+
 
 class LoginRequiredMixin(LRM):
     raise_exception = True
+
 
 class AdminRequiredMixin(UPTM):
     raise_exception = True
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user.is_superuser
 
+
 def admin_test(user):
     if user.is_anonymous or not user.is_superuser:
         raise PermissionDenied
 
+
 def open_test(user, section):
     if not(user.is_authenticated and user.is_superuser) and not section.open:
         raise PermissionDenied
+
+
+def current_test(user, section):
+    if not(user.is_authenticated and user.is_superuser) and not section.round.current:
+        raise PermissionDenied
+
 
 def open_roundgroup(request, pk):
     admin_test(request.user)
@@ -43,6 +52,7 @@ def open_roundgroup(request, pk):
             section.save()
     return redirect('extemp:manage_roundgroups', pk=roundgroup.tournament.pk)
 
+
 def close_roundgroup(request, pk):
     admin_test(request.user)
     roundgroup = get_object_or_404(RoundGroup, pk=pk)
@@ -52,6 +62,7 @@ def close_roundgroup(request, pk):
             section.save()
     return redirect('extemp:manage_roundgroups', pk=roundgroup.tournament.pk)
 
+
 def current_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
@@ -60,12 +71,14 @@ def current_round(request, pk):
     round.save()
     return redirect(round.event.tournament)
 
+
 def remove_current_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
     round.current = False
     round.save()
     return redirect(round.event.tournament)
+
 
 def open_round(request, pk):
     admin_test(request.user)
@@ -75,6 +88,7 @@ def open_round(request, pk):
         section.save()
     return redirect(round.event.tournament)
 
+
 def close_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
@@ -83,6 +97,7 @@ def close_round(request, pk):
         section.save()
     return redirect(round.event.tournament)
 
+
 def open_section(request, pk):
     admin_test(request.user)
     section = get_object_or_404(Section, pk=pk)
@@ -90,12 +105,14 @@ def open_section(request, pk):
     section.save()
     return redirect(section)
 
+
 def close_section(request, pk):
     admin_test(request.user)
     section = get_object_or_404(Section, pk=pk)
     section.open = False
     section.save()
     return redirect(section)
+
 
 def manage_sections(request, pk):
     admin_test(request.user)
@@ -113,6 +130,7 @@ def manage_sections(request, pk):
         sectionformset = SectionFormSet(instance=round)
     return render(request, 'extemp/manage_sections.html', context={'sectionformset': sectionformset, 'round': round})
 
+
 def manage_roundgroups(request, pk):
     admin_test(request.user)
     tournament = get_object_or_404(Tournament, pk=pk)
@@ -125,6 +143,7 @@ def manage_roundgroups(request, pk):
     else:
         roundgroupformset = RoundGroupFormSet(instance=tournament)
     return render(request, 'extemp/manage_roundgroups.html', context={'roundgroupformset': roundgroupformset, 'tournament': tournament})
+
 
 def manage_topics(request, pk):
     admin_test(request.user)
@@ -139,8 +158,9 @@ def manage_topics(request, pk):
             elif (p:=request.POST.get(f'pk-{x}')):
                Topic.objects.get(pk=p).delete()
         return redirect(round.event.tournament)
-    topics = (* (round.topic_set.order_by('code')), *([] for x in range(30-round.topic_set.count())))
-    return render(request, 'extemp/manage_topics.html', context={'round': round, 'topics': topics})
+    topics = round.topic_set.order_by('code')
+    topics_add = ([] for x in range(30-round.topic_set.count()))
+    return render(request, 'extemp/manage_topics.html', context={'round': round, 'topics': topics, 'topics_add': topics_add})
 
 
 def bulk_add_topics(request, pk):
@@ -160,10 +180,10 @@ def bulk_add_topics(request, pk):
 
 def draw_topics(request, pk):
     section = get_object_or_404(Section, pk=pk)
-    open_test(request.user, section)
+    current_test(request.user, section)
     if section.drawn_topics.exists():
         return redirect('extemp:select_topic', pk=pk)
-    if request.method == 'POST' and (y:=request.POST.get('yes')) and (name:=request.POST.get('name')):
+    if request.method == 'POST' and (y:=request.POST.get('yes')) and (name:=request.POST.get('name')) and section.open:
         topics = sample(list(section.unclaimed_topics()), 3)
         for topic in topics:
             topic.modified = datetime.now(tz=timezone.utc)
@@ -172,6 +192,7 @@ def draw_topics(request, pk):
         section.drawn_topics.add(*topics)
         return redirect('extemp:select_topic', pk=pk)
     return render(request, 'extemp/draw_topics.html', context={'section': section})
+
 
 def select_topic(request, pk):
     section = get_object_or_404(Section, pk=pk)
@@ -194,8 +215,10 @@ def select_topic(request, pk):
             return render(request, 'extemp/topicinstance_detail.html', context={'topicinstance': topic})
     return render(request, 'extemp/select_topic.html', context={'topics': topics, 'section': section})
 
+
 class ActivationRequiredMixin:
     pass
+
 
 class TournamentCreate(AdminRequiredMixin, CreateView):
     model = Tournament
@@ -205,6 +228,7 @@ class TournamentCreate(AdminRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         form.instance.save()
         return redirect(form.instance.get_set_tournament_details_url())
+
 
 def set_tournament_details(request, pk):
     admin_test(request.user)
@@ -231,21 +255,27 @@ def set_tournament_details(request, pk):
         return redirect(tournament.get_absolute_url())
     return render(request, "extemp/set_tournament_details.html", context={"tournament": tournament, "choices": choices})
 
+
 class TournamentDetail(AdminRequiredMixin, DetailView):
     model = Tournament
+
 
 class TournamentList(AdminRequiredMixin, ListView):
     model = Tournament
 
+
 class SectionDetail(AdminRequiredMixin, DetailView):
     model = Section
+
 
 class SectionDetailProduction(DetailView):
     model = Section
     template_name = 'extemp/section_detail_production.html'
 
+
 class TopicDetail(AdminRequiredMixin, DetailView):
     model = TopicInstance
+
 
 class RoundGroupDetail(AdminRequiredMixin, DetailView):
     model = RoundGroup

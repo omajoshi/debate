@@ -1,5 +1,8 @@
+from django.conf.urls.static import static
 from django.urls import path
+
 from .views import *
+
 
 app_name = 'extemp'
 urlpatterns = [
@@ -12,8 +15,8 @@ urlpatterns = [
     path('round/<int:pk>/remove/', remove_current_round, name='remove_current_round'),
     path('round/<int:pk>/open/', open_round, name='open_round'),
     path('round/<int:pk>/close/', close_round, name='close_round'),
-    path('round/<int:pk>/admin/bulk', bulk_add_topics, name='bulk_add_topics'),
-    path('round/<int:pk>/admin/', manage_topics, name='manage_topics'),
+    path('round/<int:pk>/admin/manual/', manage_topics, name='manage_topics'),
+    path('round/<int:pk>/admin/', bulk_add_topics, name='bulk_add_topics'),
     path('topic/<int:pk>/', TopicDetail.as_view(), name='topic_detail'),
     path('section/<int:pk>/draw/select/', select_topic, name='select_topic'),
     path('section/<int:pk>/draw/', draw_topics, name='draw_topics'),

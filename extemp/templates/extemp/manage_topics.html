@@ -4,7 +4,7 @@
 {% block content %}
 <h1><a href="{% url 'extemp:tournament_detail' round.event.tournament.pk %}">{{ round.event.tournament.name }} - Extemp Dashboard</a></h1>
 <h1>{{round}}</h1>
-<h2>Manage Topics <a href="{% url 'extemp:bulk_add_topics' round.pk %}">Bulk Add Topics</a></h2>
+<h2><a href="{% url 'extemp:bulk_add_topics' round.pk %}">Bulk Add Topics</a> Manually Manage Topics</h2>
 <form action="{% url 'extemp:manage_topics' round.pk %}" method="post">
 {% csrf_token %}
 <div class="row">
@@ -22,6 +22,20 @@
     <div class="col-sm-11">
         <div class="form-group">
             <input type="text" style="width:100%" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" value="{{ topic.question }}" />
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% for topic in topics_add %}
+<div class="row">
+    <div class="col-sm-1">
+        <div class="form-group">
+            <input type="number" id="code-{{forloop.counter}}" name="code-{{forloop.counter}}" min="1" max="99" value="" />
+        </div>
+    </div>
+    <div class="col-sm-11">
+        <div class="form-group">
+            <input type="text" style="width:100%" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" value="" />
         </div>
     </div>
 </div>
