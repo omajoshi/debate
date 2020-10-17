@@ -1,6 +1,6 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
-<h1>{{ tournament.name }} - Extemp Dashboard</h1>
+<h1>{{ tournament.name }} Dashboard - <a href="{% url 'extemp:tournament_clock' tournament.pk %}">Clock</a></h1>
 <hr>
 <h3>Current Rounds - <a href="{% url 'extemp:open_current_rounds' tournament.pk %}">Open All Envelopes</a> - <a href="{% url 'extemp:close_current_rounds' tournament.pk %}">Close All Envelopes</a> - <a href="{% url 'extemp:get_current_urls' tournament.pk %}">Get URLs</a></h3>
 {% for round in tournament.get_current_rounds %}
@@ -23,7 +23,7 @@
 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allRounds" aria-expanded="false" aria-controls="allRounds">
     View All Rounds
 </button>
-<div class="collapse" id="allRounds">
+<div class="collapse show" id="allRounds">
 {% for event in tournament.event_set.all %}
 <hr>
 <h3>{{ event.name }}</h3>

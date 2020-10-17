@@ -1,0 +1,14 @@
+{% extends 'extemp/base.html' %}
+{% block content %}
+<h1>{{ tournament.name }} Dashboard - Clock</a></h1>
+<hr>
+<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#allSpeakers" aria-expanded="false" aria-controls="allSpeakers">
+    View All Speakers
+</button>
+<div class="collapse show" id="allSpeakers">
+  <h2>Topics Drawn</h2>
+  {% for instance in tournament.get_current_topicinstances %}
+  <p>{{ instance.section.round.event.code }} {{ instance.section.round.get_name_display }} Speaker {{ instance.index }} drew <b>{{ instance.modified | timesince }} ago</b></p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -290,6 +290,11 @@ class TournamentDetail(AdminRequiredMixin, DetailView):
     model = Tournament
 
 
+class TournamentClock(DetailView):
+    model = Tournament
+    template_name = 'extemp/tournament_clock.html'
+
+
 class TournamentList(AdminRequiredMixin, ListView):
     model = Tournament
 
