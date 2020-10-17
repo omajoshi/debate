@@ -11,6 +11,9 @@ class Tournament(models.Model):
     def get_absolute_url(self):
         return reverse('extemp:tournament_detail', kwargs={'pk': self.pk})
 
+    def get_set_tournament_details_url(self):
+        return reverse('extemp:tournament_set_tournament_details', kwargs={'pk': self.pk})
+
     def __str__(self):
         return f'Tournament: {self.name}'
 
@@ -42,6 +45,7 @@ class Round(models.Model):
     )
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     name = models.CharField(max_length=1, choices=ROUND_NAMES)
+    current = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.event.name}, {self.get_name_display()}'
