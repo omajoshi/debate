@@ -203,6 +203,7 @@ class TournamentCreate(AdminRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
+        form.instance.save()
         return redirect(form.instance.get_set_tournament_details_url())
 
 def set_tournament_details(request, pk):
