@@ -52,6 +52,14 @@ def close_roundgroup(request, pk):
             section.save()
     return redirect('extemp:manage_roundgroups', pk=roundgroup.tournament.pk)
 
+def current_round(request, pk):
+    admin_test(request.user)
+    round = get_object_or_404(Round, pk=pk)
+    round.event.round_set.update(current=False)
+    round.current = True
+    round.save()
+    return redirect(round.event.tournament)
+
 def open_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)

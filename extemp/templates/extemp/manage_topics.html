@@ -7,16 +7,25 @@
 <h2>Manage Topics <a href="{% url 'extemp:bulk_add_topics' round.pk %}">Bulk Add Topics</a></h2>
 <form action="{% url 'extemp:manage_topics' round.pk %}" method="post">
 {% csrf_token %}
-<table>
+<div class="row">
+    <div class="col-sm-1">Code</div>
+    <div class="col-sm-11">Question</div>
+</div>
 {% for topic in topics %}
-<tr>
-<td>Code</td>
-<td><input type="hidden" name="pk-{{forloop.counter}}" value="{{ topic.pk }}" /><input type="number" id="code-{{forloop.counter}}" name="code-{{forloop.counter}}" min="1" max="99" value="{{ topic.code }}" /></td>
-<td>Question</td>
-<td><input type="text" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" size="150" value="{{ topic.question }}" /></td>
-</tr>
+<div class="row">
+    <div class="col-sm-1">
+        <div class="form-group">
+            <input type="hidden" name="pk-{{forloop.counter}}" value="{{ topic.pk }}" />
+            <input type="number" id="code-{{forloop.counter}}" name="code-{{forloop.counter}}" min="1" max="99" value="{{ topic.code }}" />
+        </div>
+    </div>
+    <div class="col-sm-11">
+        <div class="form-group">
+            <input type="text" style="width:100%" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" value="{{ topic.question }}" />
+        </div>
+    </div>
+</div>
 {% endfor %}
-</table>
 <input type="submit" value="Submit" />
 </form>
 {% endblock %}

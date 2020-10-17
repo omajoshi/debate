@@ -8,6 +8,7 @@
 <form action="{% url 'extemp:set_tournament_details' tournament.pk %}" method="post">
 {% csrf_token %}
 {% for x in "012345" %}
+<hr>
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group">
@@ -31,7 +32,6 @@
         {% endfor %}
     </div>
 </div>
-<hr>
 {% endfor %}
 <div class="row">
     <div class="col-sm-12">
