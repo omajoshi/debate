@@ -54,6 +54,7 @@ class Round(models.Model):
         return f'{self.event.name}, {self.get_name_display()}'
 
 
+"""
 class RoundGroup(models.Model):
     name = models.CharField(max_length=50)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
@@ -61,6 +62,7 @@ class RoundGroup(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+"""
 
 class Section(models.Model):
     round = models.ForeignKey(Round, on_delete=models.CASCADE)

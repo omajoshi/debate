@@ -12,7 +12,7 @@
 <td>{% if form.instance.pk %}<a href="{% url 'extemp:close_roundgroup' form.instance.pk%}">Close All Envelopes</a>{% endif %}</td>
 <td>{% if form.instance.pk %}
 <textarea rows="10" cols="100" style="resize: none;">
-{% for round in form.instance.rounds.all %}{% for section in round.section_set.all %}{{ section.round.event.code }} {{ section.name }} {{ request.scheme }}://{{ request.get_host }}{{ section.draw_url }}
+{% for round in form.instance.rounds.all %}{% for section in round.section_set.all %}{{ section.round.event.code }} {{ section.round.get_name_display }} Section {{ section.name }} {{ request.scheme }}://{{ request.get_host }}{{ section.draw_url }}
 
 {% endfor %}{% endfor %}
 </textarea>

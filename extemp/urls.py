@@ -7,8 +7,10 @@ from .views import *
 app_name = 'extemp'
 urlpatterns = [
     path('tournament/create/', TournamentCreate.as_view(), name='tournament_create'),
-    path('tournament/<int:pk>/roundgroups/', manage_roundgroups, name='manage_roundgroups'),
+    # path('tournament/<int:pk>/roundgroups/', manage_roundgroups, name='manage_roundgroups'),
     path('tournament/<int:pk>/details/', set_tournament_details, name='set_tournament_details'),
+    path('tournament/<int:pk>/open/', open_current_rounds, name='open_current_rounds'),
+    path('tournament/<int:pk>/close/', close_current_rounds, name='close_current_rounds'),
     path('tournament/<int:pk>/', TournamentDetail.as_view(), name='tournament_detail'),
     path('round/<int:pk>/sections/', manage_sections, name='manage_sections'),
     path('round/<int:pk>/current/', current_round, name='current_round'),
@@ -24,7 +26,7 @@ urlpatterns = [
     path('section/<int:pk>/close/', close_section, name='close_section'),
     path('section/<int:pk>/secret/', SectionDetail.as_view(), name='section_detail_secret'),
     path('section/<int:pk>/', SectionDetailProduction.as_view(), name='section_detail'),
-    path('roundgroup/<int:pk>/open/', open_roundgroup, name='open_roundgroup'),
-    path('roundgroup/<int:pk>/close/', close_roundgroup, name='close_roundgroup'),
+    # path('roundgroup/<int:pk>/open/', open_roundgroup, name='open_roundgroup'),
+    # path('roundgroup/<int:pk>/close/', close_roundgroup, name='close_roundgroup'),
     path('', TournamentList.as_view(), name='tournament_list'),
 ]

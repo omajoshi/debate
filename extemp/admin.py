@@ -34,7 +34,9 @@ class SectionAdmin(admin.ModelAdmin):
 admin.site.register(Topic)
 admin.site.register(TopicInstance)
 
+"""
 @admin.register(RoundGroup)
 class RoundGroupAdmin(admin.ModelAdmin):
     form = RoundGroupForm
     fields = ['tournament', 'name', 'rounds']
+"""

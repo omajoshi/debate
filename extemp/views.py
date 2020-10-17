@@ -43,6 +43,27 @@ def current_test(user, section):
         raise PermissionDenied
 
 
+def open_current_rounds(request, pk):
+    admin_test(request.user)
+    tournament = get_object_or_404(Tournament, pk=pk)
+    for round in tournament.get_current_rounds():
+        for section in round.section_set.all():
+            section.open = True
+            section.save()
+    return redirect(tournament)
+
+
+def close_current_rounds(request, pk):
+    admin_test(request.user)
+    tournament = get_object_or_404(Tournament, pk=pk)
+    for round in tournament.get_current_rounds():
+        for section in round.section_set.all():
+            section.open = False
+            section.save()
+    return redirect(tournament)
+
+
+"""
 def open_roundgroup(request, pk):
     admin_test(request.user)
     roundgroup = get_object_or_404(RoundGroup, pk=pk)
@@ -61,6 +82,7 @@ def close_roundgroup(request, pk):
             section.open = False
             section.save()
     return redirect('extemp:manage_roundgroups', pk=roundgroup.tournament.pk)
+"""
 
 
 def current_round(request, pk):
@@ -131,6 +153,7 @@ def manage_sections(request, pk):
     return render(request, 'extemp/manage_sections.html', context={'sectionformset': sectionformset, 'round': round})
 
 
+"""
 def manage_roundgroups(request, pk):
     admin_test(request.user)
     tournament = get_object_or_404(Tournament, pk=pk)
@@ -143,7 +166,7 @@ def manage_roundgroups(request, pk):
     else:
         roundgroupformset = RoundGroupFormSet(instance=tournament)
     return render(request, 'extemp/manage_roundgroups.html', context={'roundgroupformset': roundgroupformset, 'tournament': tournament})
-
+"""
 
 def manage_topics(request, pk):
     admin_test(request.user)
@@ -275,7 +298,3 @@ class SectionDetailProduction(DetailView):
 
 class TopicDetail(AdminRequiredMixin, DetailView):
     model = TopicInstance
-
-
-class RoundGroupDetail(AdminRequiredMixin, DetailView):
-    model = RoundGroup

@@ -1,6 +1,6 @@
 {% extends 'extemp/base.html' %}
 {% block content %}
-<h1>{{ tournament.name }} - Extemp Dashboard <a href="{% url 'extemp:manage_roundgroups' tournament.pk %}">Manage Round Groups</a></h1>
+<h1>{{ tournament.name }} - Extemp Dashboard</h1>
 <hr>
 <h3>Current Rounds</h3>
 {% for round in tournament.get_current_rounds %}
