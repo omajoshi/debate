@@ -126,5 +126,5 @@ ALLOWED_HOSTS
 '''
 
 # UNCOMMENT THIS ONCE YOU SET THE LOCAL SETTINGS
-# from .local_settings import *
+from .local_settings import *
 
