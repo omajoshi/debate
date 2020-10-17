@@ -8,7 +8,7 @@
 <div class="collapse show" id="allSpeakers">
   <h2>Topics Drawn</h2>
   {% for instance in tournament.get_current_topicinstances %}
-  <p>{{ instance.section.round.event.code }} {{ instance.section.round.get_name_display }} Speaker {{ instance.index }} drew <b>{{ instance.modified | timesince }} ago</b></p>
+  <p>{{ instance.section.round.event.code }} {{ instance.section.round.get_name_display }} Speaker {{ instance.index }} - {{ instance.name }} drew <b>{{ instance.modified | timesince }} ago</b></p>
   {% endfor %}
 </div>
 {% endblock %}
