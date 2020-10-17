@@ -1,0 +1,10 @@
+{% extends 'extemp/base.html' %}
+{% block content %}
+<h1><a href="{% url 'extemp:tournament_detail' tournament.pk %}">{{ tournament.name }} - Extemp Dashboard</a></h1>
+<h2>Current Round URLs</h2>
+<textarea rows="10" cols="100" style="resize: none;">
+{% for round in tournament.get_current_rounds %}{% for section in round.section_set.all %}{{ section.round.event.code }} {{ section.round.get_name_display }} Section {{ section.name }} {{ request.scheme }}://{{ request.get_host }}{{ section.draw_url }}
+
+{% endfor %}{% endfor %}
+</textarea>
+{% endblock %}

@@ -63,6 +63,12 @@ def close_current_rounds(request, pk):
     return redirect(tournament)
 
 
+def get_current_urls(request, pk):
+    admin_test(request.user)
+    tournament = get_object_or_404(Tournament, pk=pk)
+    return render(request, 'extemp/get_current_urls.html', context={'tournament': tournament})
+
+
 """
 def open_roundgroup(request, pk):
     admin_test(request.user)
@@ -85,7 +91,7 @@ def close_roundgroup(request, pk):
 """
 
 
-def current_round(request, pk):
+def set_current_round(request, pk):
     admin_test(request.user)
     round = get_object_or_404(Round, pk=pk)
     round.event.round_set.update(current=False)
