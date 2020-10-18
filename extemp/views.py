@@ -179,17 +179,21 @@ def manage_topics(request, pk):
     round = get_object_or_404(Round, pk=pk)
     if request.method == 'POST':
         for x in range(1, 31):
-            if (c:=request.POST.get(f'code-{x}')) and (q:=request.POST.get(f'question-{x}')):
-                t, created = round.topic_set.update_or_create(code=c, defaults={'question': q})
-                if created:
+            p = request.POST.get(f'pk-{x}')
+            c = request.POST.get(f'code-{x}')
+            q = request.POST.get(f'question-{x}')
+            if not p:
+                if c and q:
+                    round.topic_set.create(code=c, question=q)
                     for section in round.section_set.all():
                         section.topicinstance_set.create(topic=t)
-            elif (p:=request.POST.get(f'pk-{x}')):
-               Topic.objects.get(pk=p).delete()
+            elif not c and not q:
+                Topic.objects.filter(pk=p).delete()
+            elif c and q:
+                Topic.objects.filter(pk=p).update(code=c, question=q)
         return redirect(round.event.tournament)
-    topics = round.topic_set.order_by('code')
-    topics_add = ([] for x in range(30-round.topic_set.count()))
-    return render(request, 'extemp/manage_topics.html', context={'round': round, 'topics': topics, 'topics_add': topics_add})
+    topics = (*round.topic_set.order_by('code'), *([] for x in range(30-round.topic_set.count())))
+    return render(request, 'extemp/manage_topics.html', context={'round': round, 'topics': topics})
 
 
 def bulk_add_topics(request, pk):

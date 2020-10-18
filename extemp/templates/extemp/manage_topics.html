@@ -15,27 +15,13 @@
 <div class="row">
     <div class="col-sm-1">
         <div class="form-group">
-            <input type="hidden" name="pk-{{forloop.counter}}" value="{{ topic.pk }}" />
-            <input type="number" id="code-{{forloop.counter}}" name="code-{{forloop.counter}}" min="1" max="99" value="{{ topic.code }}" />
+            {% if topic %}<input type="hidden" name="pk-{{forloop.counter}}" value="{{ topic.pk }}" />{% endif %}
+            <input type="number" id="code-{{forloop.counter}}" name="code-{{forloop.counter}}" min="1" max="99" {% if topic %}value="{{ topic.code }}"{% endif %} />
         </div>
     </div>
     <div class="col-sm-11">
         <div class="form-group">
-            <input type="text" style="width:100%" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" value="{{ topic.question }}" />
-        </div>
-    </div>
-</div>
-{% endfor %}
-{% for topic in topics_add %}
-<div class="row">
-    <div class="col-sm-1">
-        <div class="form-group">
-            <input type="number" id="code-{{forloop.counter}}" name="code-{{forloop.counter}}" min="1" max="99" value="" />
-        </div>
-    </div>
-    <div class="col-sm-11">
-        <div class="form-group">
-            <input type="text" style="width:100%" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" value="" />
+            <input type="text" style="width:100%" id="question-{{forloop.counter}}" name="question-{{forloop.counter}}" maxlength="200" {% if topic %}value="{{ topic.question }}"{% endif %} />
         </div>
     </div>
 </div>
